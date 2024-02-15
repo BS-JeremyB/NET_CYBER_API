@@ -20,7 +20,8 @@ namespace NET_CYBER_API.BLL.Services
 
         public Ticket? Create(Ticket ticket)
         {
-            throw new NotImplementedException();
+            int id = _repository.GetAll().Max(t => t.Id) +1 ;
+            ticket.Id = id;
         }
 
         public bool Delete(Ticket ticket)
@@ -30,7 +31,7 @@ namespace NET_CYBER_API.BLL.Services
 
         public IEnumerable<Ticket> GetAll()
         {
-            throw new NotImplementedException();
+            return _repository.GetAll();
         }
 
         public Ticket? GetById(int id)

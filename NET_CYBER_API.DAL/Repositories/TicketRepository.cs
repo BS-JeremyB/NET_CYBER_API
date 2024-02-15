@@ -1,4 +1,5 @@
-﻿using NET_CYBER_API.DAL.Interfaces;
+﻿using NET_CYBER_API.DAL.Data;
+using NET_CYBER_API.DAL.Interfaces;
 using NET_CYBER_API.Domain.Models;
 using System;
 using System.Collections.Generic;
@@ -22,7 +23,7 @@ namespace NET_CYBER_API.DAL.Repositories
 
         public IEnumerable<Ticket> GetAll()
         {
-            throw new NotImplementedException();
+            return FakeDB.tickets;
         }
 
         public Ticket? GetById(int id)
