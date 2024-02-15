@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NET_CYBER_API.DAL\NET_CYBER_API.DAL.csproj" />
+    <ProjectReference Include="..\NET_CYBER_API.Domain\NET_CYBER_API.Domain.csproj" />
+  </ItemGroup>
+
+</Project>
