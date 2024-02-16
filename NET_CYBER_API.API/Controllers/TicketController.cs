@@ -5,6 +5,8 @@ using NET_CYBER_API.Domain.Models;
 using NET_CYBER_API.BLL.Interfaces;
 using NET_CYBER_API.BLL.CustomExceptions;
 using NET_CYBER_API.API.Tools.Errors;
+using NET_CYBER_API.API.DTOs;
+using NET_CYBER_API.API.Mappers;
 
 namespace NET_CYBER_API.API.Controllers
 {
@@ -62,9 +64,10 @@ namespace NET_CYBER_API.API.Controllers
         [HttpPost]
         [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Ticket))]
-        public ActionResult<Ticket> Insert([FromBody]Ticket ticket)
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public ActionResult<Ticket> Insert([FromBody] TicketDataDTO ticket)
         {
-            Ticket ticketCreated = _service.Create(ticket);
+            Ticket ticketCreated = _service.Create(ticket.DTOToDomain());
             //CreatedAtAction, va rajouter dans location (dans les headers) la requête à faire pour avoir accès la ressource qui vient d'être créée
             //Donc on doit lui renseigner: 
                 // en premier param, la méthode à appeler (ici notre Get avec Id)

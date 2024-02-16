@@ -21,9 +21,12 @@ namespace NET_CYBER_API.BLL.Services
 
         public Ticket? Create(Ticket ticket)
         {
-
             // On doit créer l'id
             ticket.Id = _repository.GetAll().Max(t => t.Id) + 1;
+            // On doit mettre la date de création du ticket
+            ticket.DateCreation = DateTime.Now;
+            // On doit mettre qu'elle n'est pas complétée quand elle vient d'être créée
+            ticket.EstComplete = false;
             // On peut appeler notre repo
             return _repository.Create(ticket);
         }
