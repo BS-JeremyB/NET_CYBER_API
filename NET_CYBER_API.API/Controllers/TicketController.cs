@@ -58,6 +58,20 @@ namespace NET_CYBER_API.API.Controllers
             }
             
         }
+
+        [HttpPost]
+        [Produces("application/json")]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Ticket))]
+        public ActionResult<Ticket> Insert([FromBody]Ticket ticket)
+        {
+            Ticket ticketCreated = _service.Create(ticket);
+            //CreatedAtAction, va rajouter dans location (dans les headers) la requête à faire pour avoir accès la ressource qui vient d'être créée
+            //Donc on doit lui renseigner: 
+                // en premier param, la méthode à appeler (ici notre Get avec Id)
+                // en deuxième param, le(s) paramètre(s) dont à a besoin la méthode du premier param,
+                // en troisième param, la ressource à mettre en réponse dans le json
+            return CreatedAtAction(nameof(Get), new { id = ticketCreated.Id }, ticketCreated);
+        }
         
     
     }

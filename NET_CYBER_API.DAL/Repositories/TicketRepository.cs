@@ -13,7 +13,8 @@ namespace NET_CYBER_API.DAL.Repositories
     {
         public Ticket? Create(Ticket ticket)
         {
-            throw new NotImplementedException();
+            FakeDB.tickets.Add(ticket);
+            return ticket;
         }
 
         public bool Delete(Ticket ticket)

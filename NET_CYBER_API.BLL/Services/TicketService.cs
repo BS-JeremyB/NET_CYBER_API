@@ -21,8 +21,11 @@ namespace NET_CYBER_API.BLL.Services
 
         public Ticket? Create(Ticket ticket)
         {
-            throw new NotImplementedException();
 
+            // On doit créer l'id
+            ticket.Id = _repository.GetAll().Max(t => t.Id) + 1;
+            // On peut appeler notre repo
+            return _repository.Create(ticket);
         }
 
         public bool Delete(Ticket ticket)
