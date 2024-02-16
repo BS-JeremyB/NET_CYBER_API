@@ -75,7 +75,33 @@ namespace NET_CYBER_API.API.Controllers
                 // en troisième param, la ressource à mettre en réponse dans le json
             return CreatedAtAction(nameof(Get), new { id = ticketCreated.Id }, ticketCreated);
         }
-        
+
+
+        [HttpDelete("{id}")]
+        [Produces("application/json")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ErrorResponse))]
+        [ProducesResponseType(StatusCodes.Status409Conflict, Type = typeof(ErrorResponse))]
+
+        public ActionResult Delete([FromRoute] int id)
+        {
+            try
+            {
+                _service.Delete(id);
+                return NoContent();
+            }
+            catch(NotFoundException ex)
+            {
+                return NotFound(new ErrorResponse(code : StatusCodes.Status404NotFound, message : ex.Message));
+
+            }
+            catch(NotSingleException ex)
+            {
+                return Conflict(new ErrorResponse(code: StatusCodes.Status409Conflict, message: ex.Message));
+            }
+                
+        }
+
     
     }
 }

@@ -31,9 +31,22 @@ namespace NET_CYBER_API.BLL.Services
             return _repository.Create(ticket);
         }
 
-        public bool Delete(Ticket ticket)
+        public bool Delete(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                bool success = _repository.Delete(id);
+                if(!success)
+                {
+                    throw new NotFoundException($"Le ticket {id} n'a pas été trouvé");
+                }
+                return success;
+
+            }
+            catch(InvalidOperationException ex)
+            {
+                throw new NotSingleException($"Ceci n'est pas sensé arriver mais padchance, y'a 2 fois le ticket {id} dans la DB");
+            }
         }
 
         public IEnumerable<Ticket> GetAll()

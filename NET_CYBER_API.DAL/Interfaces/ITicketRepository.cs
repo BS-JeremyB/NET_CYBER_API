@@ -15,6 +15,6 @@ namespace NET_CYBER_API.DAL.Interfaces
         Ticket? GetById(int id);
         Ticket? Create(Ticket ticket);
         Ticket? Update(Ticket ticket);
-        bool Delete(Ticket ticket);
+        bool Delete(int id);
     }
 }

@@ -17,9 +17,9 @@ namespace NET_CYBER_API.DAL.Repositories
             return ticket;
         }
 
-        public bool Delete(Ticket ticket)
+        public bool Delete(int id)
         {
-            throw new NotImplementedException();
+            return FakeDB.tickets.Remove(GetById(id));
         }
 
         public IEnumerable<Ticket> GetAll()
