@@ -7,6 +7,7 @@ using NET_CYBER_API.BLL.CustomExceptions;
 using NET_CYBER_API.API.Tools.Errors;
 using NET_CYBER_API.API.DTOs;
 using NET_CYBER_API.API.Mappers;
+using System.Net.Sockets;
 
 namespace NET_CYBER_API.API.Controllers
 {
@@ -130,11 +131,33 @@ namespace NET_CYBER_API.API.Controllers
             }
         }
 
-        //public ActionResult Complete()
-        //{
-        //    return NotFound();
+        //[HttpPatch("{id}")] 
+        // Ou 
+        //Attention on a déjà un PUT, on doit donc rajouter un segment dans la route pour avoir deux différents
+        [HttpPut("Complete/{id}")] 
+        [Produces("application/json")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Ticket))]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ErrorResponse))]
+        [ProducesResponseType(StatusCodes.Status409Conflict, Type = typeof(ErrorResponse))]
+        public ActionResult<Ticket> Complete([FromRoute] int id)
+        {
+            try
+            {
+                Ticket ticketCompleted = _service.Complete(id);
+                return Ok(ticketCompleted);
+                // return NoContent(); //On renvoie juste un code de  succès sans fournir l'objet modifié //Les deux sont bonnes
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(new ErrorResponse(code: StatusCodes.Status404NotFound, message: ex.Message));
 
-        //}
+            }
+            catch (NotSingleException ex)
+            {
+                return Conflict(new ErrorResponse(code: StatusCodes.Status409Conflict, message: ex.Message));
+            }
+
+        }
 
 
     }

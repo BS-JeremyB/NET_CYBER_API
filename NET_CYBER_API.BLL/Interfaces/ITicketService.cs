@@ -13,6 +13,8 @@ namespace NET_CYBER_API.BLL.Interfaces
         Ticket GetById(int id);
         Ticket Create(Ticket ticket);
         Ticket Update(Ticket ticket);
+
+        Ticket Complete(int id);
         bool Delete(int id);
     }
 }

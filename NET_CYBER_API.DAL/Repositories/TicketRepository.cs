@@ -4,6 +4,7 @@ using NET_CYBER_API.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -43,6 +44,16 @@ namespace NET_CYBER_API.DAL.Repositories
             }
             return ticketToUpdate;
             
+        }
+
+        public Ticket? Complete(int id)
+        {
+            Ticket? ticketToComplete = GetById(id);
+            if( ticketToComplete is not null ) {
+                ticketToComplete.DateCloture = DateTime.Now;
+                ticketToComplete.EstComplete = true;
+            }
+            return ticketToComplete;
         }
     }
 }

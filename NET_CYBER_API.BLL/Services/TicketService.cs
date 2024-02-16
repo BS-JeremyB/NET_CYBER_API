@@ -90,5 +90,22 @@ namespace NET_CYBER_API.BLL.Services
                 throw new NotSingleException($"Ceci n'est pas sensé arriver mais padchance, y'a 2 fois le ticket {ticket.Id} dans la DB");
             }
         }
+
+        public Ticket Complete(int id)
+        {
+            try
+            {
+                Ticket? ticketToComplete = _repository.Complete(id);
+                if (ticketToComplete is null)
+                {
+                    throw new NotFoundException($"Le ticket {id} n'a pas été trouvé");
+                }
+                return ticketToComplete;
+            }
+            catch (InvalidOperationException ex)
+            {
+                throw new NotSingleException($"Ceci n'est pas sensé arriver mais padchance, y'a 2 fois le ticket {id} dans la DB");
+            }
+        }
     }
 }
