@@ -8,7 +8,7 @@ namespace NET_CYBER_API.API.DTOs
         public string Auteur { get; set; }
 
         [Required(ErrorMessage = "Le champs Titre est requis")]
-        [MaxLength(15, ErrorMessage = "Le champs Titre doit faire maximum 15 caractères")]
+        [MaxLength(50, ErrorMessage = "Le champs Titre doit faire maximum 50 caractères")]
         public string Titre { get; set; }
 
         [MaxLength(200, ErrorMessage = "Le champs Description doit faire maximum 200 caractères")]

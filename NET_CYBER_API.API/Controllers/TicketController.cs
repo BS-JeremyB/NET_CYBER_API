@@ -102,6 +102,40 @@ namespace NET_CYBER_API.API.Controllers
                 
         }
 
-    
+        [HttpPut("{id}")]
+        [Produces("application/json")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Ticket))]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ErrorResponse))]
+        [ProducesResponseType(StatusCodes.Status409Conflict, Type = typeof(ErrorResponse))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public ActionResult<Ticket> Update([FromRoute] int id, [FromBody] TicketDataDTO ticket)
+        {
+            try
+            {
+                Ticket ticketToUpdate = ticket.DTOToDomain();
+                // l'Id du ticket après mapping vaut 0, il faut qu'on envoie l'id reçu en route puisque notre Update du service attend juste un ticket et non id + ticket
+                ticketToUpdate.Id = id;
+                Ticket ticketUpdated = _service.Update(ticketToUpdate);
+                return Ok(ticketUpdated); 
+                // return NoContent(); //On renvoie juste un code de  succès sans fournir l'objet modifié //Les deux sont bonnes
+            }
+            catch(NotFoundException ex)
+            {
+                return NotFound(new ErrorResponse(code: StatusCodes.Status404NotFound, message: ex.Message));
+
+            }
+            catch(NotSingleException ex)
+            {
+                return Conflict(new ErrorResponse(code: StatusCodes.Status409Conflict, message: ex.Message));
+            }
+        }
+
+        //public ActionResult Complete()
+        //{
+        //    return NotFound();
+
+        //}
+
+
     }
 }

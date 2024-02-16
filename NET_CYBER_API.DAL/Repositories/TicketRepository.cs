@@ -35,7 +35,14 @@ namespace NET_CYBER_API.DAL.Repositories
 
         public Ticket? Update(Ticket ticket)
         {
-            throw new NotImplementedException();
+            Ticket? ticketToUpdate = GetById(ticket.Id);
+            if(ticketToUpdate is not null) { 
+                ticketToUpdate.Auteur = ticket.Auteur;
+                ticketToUpdate.Titre = ticket.Titre;
+                ticketToUpdate.Description = ticket.Description ?? ticketToUpdate.Description;
+            }
+            return ticketToUpdate;
+            
         }
     }
 }

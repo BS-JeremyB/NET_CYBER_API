@@ -74,9 +74,21 @@ namespace NET_CYBER_API.BLL.Services
                        
         }
 
-        public Ticket? Update(Ticket ticket)
+        public Ticket Update(Ticket ticket)
         {
-            throw new NotImplementedException();
+            try
+            {
+                Ticket? ticketToUpdate = _repository.Update(ticket);
+                if(ticketToUpdate is null)
+                {
+                    throw new NotFoundException($"Le ticket {ticket.Id} n'a pas été trouvé");
+                }
+                return ticketToUpdate;
+            }
+            catch(InvalidOperationException ex)
+            {
+                throw new NotSingleException($"Ceci n'est pas sensé arriver mais padchance, y'a 2 fois le ticket {ticket.Id} dans la DB");
+            }
         }
     }
 }
