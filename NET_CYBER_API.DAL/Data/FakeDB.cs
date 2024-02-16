@@ -61,6 +61,16 @@ namespace NET_CYBER_API.DAL.Data
                 DateCloture = null,
                 EstComplete = false
             },
+            new Ticket
+            {
+                Id = 5,
+                Auteur = "Pauline",
+                Titre = "Problème de mot de passe",
+                Description = "Je n'arrive pas à me souvenir de mon mot de passe",
+                DateCreation = new DateTime(2021, 1, 5),
+                DateCloture = null,
+                EstComplete = false
+            },
         };
     }
 }

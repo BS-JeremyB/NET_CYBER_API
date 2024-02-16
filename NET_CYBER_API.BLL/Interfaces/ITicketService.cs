@@ -10,7 +10,7 @@ namespace NET_CYBER_API.BLL.Interfaces
     public interface ITicketService
     {
         IEnumerable<Ticket> GetAll();
-        Ticket? GetById(int id);
+        Ticket GetById(int id);
         Ticket? Create(Ticket ticket);
         Ticket? Update(Ticket ticket);
         bool Delete(Ticket ticket);

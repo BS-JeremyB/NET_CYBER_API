@@ -27,8 +27,9 @@ namespace NET_CYBER_API.DAL.Repositories
         }
 
         public Ticket? GetById(int id)
-        {
-            throw new NotImplementedException();
+        {      
+            return FakeDB.tickets.SingleOrDefault(t => t.Id == id);
+           
         }
 
         public Ticket? Update(Ticket ticket)

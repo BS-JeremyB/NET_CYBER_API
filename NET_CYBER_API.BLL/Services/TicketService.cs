@@ -1,6 +1,7 @@
 ﻿using NET_CYBER_API.BLL.Interfaces;
 using NET_CYBER_API.DAL.Interfaces;
 using NET_CYBER_API.Domain.Models;
+using NET_CYBER_API.BLL.CustomExceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,8 +21,8 @@ namespace NET_CYBER_API.BLL.Services
 
         public Ticket? Create(Ticket ticket)
         {
-            int id = _repository.GetAll().Max(t => t.Id) +1 ;
-            ticket.Id = id;
+            throw new NotImplementedException();
+
         }
 
         public bool Delete(Ticket ticket)
@@ -34,9 +35,24 @@ namespace NET_CYBER_API.BLL.Services
             return _repository.GetAll();
         }
 
-        public Ticket? GetById(int id)
+        public Ticket GetById(int id)
         {
-            throw new NotImplementedException();
+            Ticket? ticket;
+            try
+            {
+                ticket = _repository.GetById(id);
+                if (ticket is null)
+                {
+                    throw new NotFoundException($"Le ticket {id} n'a pas été trouvé");
+                }
+                return ticket;
+            }
+            catch(InvalidOperationException ex) {
+                throw new NotSingleException("Alors c'était vraiment très très peu probable mais y'a 2 fois l'id en DB");
+
+            }
+            
+                       
         }
 
         public Ticket? Update(Ticket ticket)
