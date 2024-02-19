@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace NET_CYBER_API.DAL.Repositories
 {
-    public class TicketRepository : ITicketRepository
+    public class TicketFakeDbRepository : ITicketRepository
     {
         public Ticket? Create(Ticket ticket)
         {

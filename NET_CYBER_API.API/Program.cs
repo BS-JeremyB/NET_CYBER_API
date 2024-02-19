@@ -1,5 +1,7 @@
+using Microsoft.EntityFrameworkCore;
 using NET_CYBER_API.BLL.Interfaces;
 using NET_CYBER_API.BLL.Services;
+using NET_CYBER_API.DAL.Data;
 using NET_CYBER_API.DAL.Interfaces;
 using NET_CYBER_API.DAL.Repositories;
 
@@ -12,8 +14,13 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<ITicketRepository, TicketRepository>();
+string connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<DataContext>(option => option.UseSqlServer(connectionString));
+
+builder.Services.AddScoped<ITicketRepository, TicketEntityRepository>();
 builder.Services.AddScoped<ITicketService, TicketService>();
+builder.Services.AddScoped<IUtilisateurRepository, UtilisateurEntityRepository>();
+builder.Services.AddScoped<IUtilisateurService, UtilisateurService>();
 
 var app = builder.Build();
 

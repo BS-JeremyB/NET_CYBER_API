@@ -76,6 +76,8 @@ namespace NET_CYBER_API.BLL.Services
 
         public Ticket Update(Ticket ticket)
         {
+
+
             try
             {
                 Ticket? ticketToUpdate = _repository.Update(ticket);
