@@ -8,6 +8,8 @@ using NET_CYBER_API.API.Tools.Errors;
 using NET_CYBER_API.API.DTOs;
 using NET_CYBER_API.API.Mappers;
 using System.Net.Sockets;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace NET_CYBER_API.API.Controllers
 {
@@ -63,17 +65,23 @@ namespace NET_CYBER_API.API.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Ticket))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public ActionResult<Ticket> Insert([FromBody] TicketDataDTO ticket)
         {
+            
+            var emailClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email);
             Ticket ticketCreated = _service.Create(ticket.DTOToDomain());
             //CreatedAtAction, va rajouter dans location (dans les headers) la requête à faire pour avoir accès la ressource qui vient d'être créée
             //Donc on doit lui renseigner: 
                 // en premier param, la méthode à appeler (ici notre Get avec Id)
                 // en deuxième param, le(s) paramètre(s) dont à a besoin la méthode du premier param,
                 // en troisième param, la ressource à mettre en réponse dans le json
+
+            //from connected user with jwt get the email
+
             return CreatedAtAction(nameof(Get), new { id = ticketCreated.Id }, ticketCreated);
         }
 

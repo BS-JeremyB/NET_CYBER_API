@@ -5,7 +5,7 @@ namespace NET_CYBER_API.API.DTOs
     public class UtilisateurDataDTO
     {
         public string? Nom {  get; set; }
-        public string? Prenom { get; set; }
+        public string? Prenom { get; set; } 
         [Required]
         [EmailAddress]
         public string Email { get; set; }

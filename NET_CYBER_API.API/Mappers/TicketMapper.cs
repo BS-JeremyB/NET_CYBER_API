@@ -10,7 +10,6 @@ namespace NET_CYBER_API.API.Mappers
             return new Ticket
             {
                 Id = 0,
-                Auteur = ticket.Auteur,
                 Description = ticket.Description,
                 Titre = ticket.Titre,
 

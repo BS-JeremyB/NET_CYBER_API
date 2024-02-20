@@ -10,10 +10,11 @@ namespace NET_CYBER_API.BLL.Interfaces
     public interface IUtilisateurService
     {
         IEnumerable<Utilisateur> GetAll();
-        Utilisateur GetById(int id);
-        Utilisateur GetByEmail(string email);
+        Utilisateur? GetById(int id);
+        Utilisateur? GetByEmail(string email);
         Utilisateur Create(Utilisateur Utilisateur);
-        Utilisateur Update(Utilisateur Utilisateur);
+        Utilisateur? Update(Utilisateur Utilisateur);
         bool Delete(int id);
+        string? Login(string email, string password);
     }
 }

@@ -1,11 +1,7 @@
 ﻿using NET_CYBER_API.DAL.Data;
 using NET_CYBER_API.DAL.Interfaces;
 using NET_CYBER_API.Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace NET_CYBER_API.DAL.Repositories
 {
@@ -18,36 +14,46 @@ namespace NET_CYBER_API.DAL.Repositories
             _context = context;
         }
 
-        public Utilisateur Create(Utilisateur Utilisateur)
+        public Utilisateur Create(Utilisateur utilisateur)
         {
-            _context.Add(Utilisateur);
+            _context.utilisateurs.Add(utilisateur);
             _context.SaveChanges();
-            return Utilisateur;
+            return utilisateur;
         }
 
         public bool Delete(int id)
         {
-            throw new NotImplementedException();
+
+            Utilisateur? utilisateur = _context.utilisateurs.FirstOrDefault(x => x.Id == id);
+            if (utilisateur is null)
+            {
+                return false;
+            }
+            _context.utilisateurs.Remove(utilisateur);
+            _context.SaveChanges();
+            return true;
         }
 
         public IEnumerable<Utilisateur> GetAll()
         {
-            throw new NotImplementedException();
+            return _context.utilisateurs;
         }
 
-        public Utilisateur GetByEmail(string email)
+        public Utilisateur? GetByEmail(string email)
         {
-            throw new NotImplementedException();
+            return _context.utilisateurs.FirstOrDefault(x => x.Email == email);  
         }
 
-        public Utilisateur GetById(int id)
+        public Utilisateur? GetById(int id)
         {
-            throw new NotImplementedException();
+            return _context.utilisateurs.FirstOrDefault(x => x.Id == id);
         }
 
         public Utilisateur Update(Utilisateur Utilisateur)
         {
-            throw new NotImplementedException();
+            _context.utilisateurs.Update(Utilisateur);
+            _context.SaveChanges();
+            return Utilisateur;
         }
     }
 }

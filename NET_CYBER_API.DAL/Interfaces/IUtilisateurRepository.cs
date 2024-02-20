@@ -10,8 +10,8 @@ namespace NET_CYBER_API.DAL.Interfaces
     public interface IUtilisateurRepository
     {
         IEnumerable<Utilisateur> GetAll();
-        Utilisateur GetById(int id);
-        Utilisateur GetByEmail(string email);
+        Utilisateur? GetById(int id);
+        Utilisateur? GetByEmail(string email);
         Utilisateur Create(Utilisateur Utilisateur);
         Utilisateur Update(Utilisateur Utilisateur);
         bool Delete(int id);

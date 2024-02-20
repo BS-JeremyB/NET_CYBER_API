@@ -7,6 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.35.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\NET_CYBER_API.DAL\NET_CYBER_API.DAL.csproj" />
     <ProjectReference Include="..\NET_CYBER_API.Domain\NET_CYBER_API.Domain.csproj" />
   </ItemGroup>
