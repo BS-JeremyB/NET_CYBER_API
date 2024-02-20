@@ -25,7 +25,7 @@ namespace NET_CYBER_API.BLL.Services
         {
             List<Claim> claims = new List<Claim>()
             {
-                new Claim("userId", utilisateur.Id.ToString()),
+                new Claim("id", utilisateur.Id.ToString()),
                 new Claim("email", utilisateur.Email),
                 new Claim("Roles", utilisateur.Role.ToString()),
             };

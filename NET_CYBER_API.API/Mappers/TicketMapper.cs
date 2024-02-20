@@ -29,5 +29,15 @@ namespace NET_CYBER_API.API.Mappers
                 EstComplete = ticket.EstComplete,
             };
         }
+
+        public static IEnumerable<TicketInfoDTO> ticketInfoDTOs(this IEnumerable<Ticket> tickets)
+        {
+            List<TicketInfoDTO> ticketInfoDTOs = new List<TicketInfoDTO>();
+            foreach (var ticket in tickets)
+            {
+                ticketInfoDTOs.Add(ticket.DomainToInfoDTO());
+            }
+            return ticketInfoDTOs;
+        }
     }
 }

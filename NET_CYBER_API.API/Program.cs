@@ -75,12 +75,18 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
                     // Retrieve the role claim from the principal
                     var roleClaim = claimsIdentity.Claims.FirstOrDefault(c => c.Type == "Roles");
+                    var idClaim = claimsIdentity.Claims.FirstOrDefault(c => c.Type == "id");
 
                     // If role claim is found, add it to the principal's identity
                     if (roleClaim != null)
                     {
                         var role = roleClaim.Value;
                         claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, role));
+                    }
+                    if (idClaim != null)
+                    {
+                        var id = idClaim.Value;
+                        claimsIdentity.AddClaim(new Claim(ClaimTypes.NameIdentifier, id));
                     }
 
                     return Task.CompletedTask;

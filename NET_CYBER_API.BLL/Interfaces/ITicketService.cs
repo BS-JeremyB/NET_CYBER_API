@@ -12,9 +12,9 @@ namespace NET_CYBER_API.BLL.Interfaces
         IEnumerable<Ticket> GetAll();
         Ticket GetById(int id);
         Ticket Create(Ticket ticket);
-        Ticket Update(Ticket ticket);
+        Ticket? Update(int userId,Ticket ticket);
 
-        Ticket Complete(int id);
+        Ticket? Complete(int id);
         bool Delete(int id);
     }
 }

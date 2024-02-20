@@ -33,7 +33,7 @@ namespace NET_CYBER_API.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof( IEnumerable<Ticket> ))]
         public ActionResult<IEnumerable<Ticket>> GetAll() 
         { 
-            return Ok(_service.GetAll());
+            return Ok(_service.GetAll().ticketInfoDTOs());
         }
 
         [HttpGet("{id}")]
@@ -101,6 +101,7 @@ namespace NET_CYBER_API.API.Controllers
 
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ErrorResponse))]
@@ -130,6 +131,7 @@ namespace NET_CYBER_API.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Ticket))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ErrorResponse))]
         [ProducesResponseType(StatusCodes.Status409Conflict, Type = typeof(ErrorResponse))]
+        [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(ErrorResponse))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public ActionResult<Ticket> Update([FromRoute] int id, [FromBody] TicketDataDTO ticket)
         {
@@ -138,8 +140,10 @@ namespace NET_CYBER_API.API.Controllers
                 Ticket ticketToUpdate = ticket.DTOToDomain();
                 // l'Id du ticket après mapping vaut 0, il faut qu'on envoie l'id reçu en route puisque notre Update du service attend juste un ticket et non id + ticket
                 ticketToUpdate.Id = id;
-                Ticket ticketUpdated = _service.Update(ticketToUpdate);
-                return Ok(ticketUpdated); 
+                Claim? idClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+                int userId = int.Parse(idClaim.Value);
+                Ticket ticketUpdated = _service.Update(userId, ticketToUpdate);
+                return Ok(ticketUpdated.DomainToInfoDTO()); 
                 // return NoContent(); //On renvoie juste un code de  succès sans fournir l'objet modifié //Les deux sont bonnes
             }
             catch(NotFoundException ex)
@@ -151,12 +155,17 @@ namespace NET_CYBER_API.API.Controllers
             {
                 return Conflict(new ErrorResponse(code: StatusCodes.Status409Conflict, message: ex.Message));
             }
+            catch (NotAuthorizedException ex)
+            {
+                return Conflict(new ErrorResponse(code: StatusCodes.Status403Forbidden, message: ex.Message));
+            }
         }
 
         //[HttpPatch("{id}")] 
         // Ou 
         //Attention on a déjà un PUT, on doit donc rajouter un segment dans la route pour avoir deux différents
-        [HttpPut("Complete/{id}")] 
+        [HttpPut("Complete/{id}")]
+        [Authorize(Roles = "Admin, Technicien")]
         [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Ticket))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ErrorResponse))]

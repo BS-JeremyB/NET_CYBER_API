@@ -1,4 +1,5 @@
-﻿using NET_CYBER_API.DAL.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using NET_CYBER_API.DAL.Data;
 using NET_CYBER_API.DAL.Interfaces;
 using NET_CYBER_API.Domain.Models;
 using System;
@@ -18,9 +19,11 @@ namespace NET_CYBER_API.DAL.Repositories
             _context = context;
         }
 
-        public Ticket? Complete(int id)
+        public Ticket? Complete(Ticket ticket)
         {
-            throw new NotImplementedException();
+            _context.tickets.Update(ticket);
+            _context.SaveChanges();
+            return ticket;
         }
 
         public Ticket Create(Ticket ticket)
@@ -32,22 +35,31 @@ namespace NET_CYBER_API.DAL.Repositories
 
         public bool Delete(int id)
         {
-            throw new NotImplementedException();
+            Ticket? ticket = _context.tickets.FirstOrDefault(x => x.Id == id);
+            if (ticket is null)
+            {
+                return false;
+            }
+            _context.tickets.Remove(ticket);
+            _context.SaveChanges();
+            return true;
         }
 
         public IEnumerable<Ticket> GetAll()
         {
-            return _context.tickets;
+            return _context.tickets.Include(u => u.Auteur);
         }
 
         public Ticket? GetById(int id)
         {
-            throw new NotImplementedException();
+            return _context.tickets.Include(u => u.Auteur).FirstOrDefault(t => t.Id == id);
         }
 
         public Ticket? Update(Ticket ticket)
         {
-            throw new NotImplementedException();
+            _context.tickets.Update(ticket);
+            _context.SaveChanges();
+            return ticket;
         }
     }
 }
