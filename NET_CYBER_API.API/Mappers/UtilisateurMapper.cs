@@ -16,5 +16,14 @@ namespace NET_CYBER_API.API.Mappers
                 Role = Domain.Enums.RoleEnum.Employee
             };
         }
+
+        public static UtilisateurInfoDTO DomainToInfoDTO(this Utilisateur utilisateur)
+        {
+            return new UtilisateurInfoDTO
+            {
+                Email = utilisateur.Email,
+                Id = utilisateur.Id,
+            };
+        }
     }
 }

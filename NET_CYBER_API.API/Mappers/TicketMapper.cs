@@ -15,5 +15,19 @@ namespace NET_CYBER_API.API.Mappers
 
             };
         }
+
+        public static TicketInfoDTO DomainToInfoDTO(this Ticket ticket)
+        {
+            return new TicketInfoDTO
+            {
+                Id = ticket.Id,
+                Auteur = ticket.Auteur.DomainToInfoDTO(),
+                Description = ticket.Description,
+                Titre = ticket.Titre,
+                DateCreation = ticket.DateCreation,
+                DateCloture = ticket.DateCloture,
+                EstComplete = ticket.EstComplete,
+            };
+        }
     }
 }

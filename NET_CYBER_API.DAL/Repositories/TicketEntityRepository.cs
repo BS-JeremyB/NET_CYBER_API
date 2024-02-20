@@ -23,7 +23,7 @@ namespace NET_CYBER_API.DAL.Repositories
             throw new NotImplementedException();
         }
 
-        public Ticket? Create(Ticket ticket)
+        public Ticket Create(Ticket ticket)
         {
             _context.tickets.Add(ticket);
             _context.SaveChanges();

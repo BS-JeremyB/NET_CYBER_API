@@ -20,10 +20,12 @@ namespace NET_CYBER_API.API.Controllers
     public class TicketController : ControllerBase
     {
         private readonly ITicketService _service;
+        private readonly IUtilisateurService _userService;
 
-        public TicketController(ITicketService service)
+        public TicketController(ITicketService service, IUtilisateurService userService)
         {
             _service = service;
+            _userService = userService;
         }
 
         [HttpGet]
@@ -66,14 +68,26 @@ namespace NET_CYBER_API.API.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         [Produces("application/json")]
-        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Ticket))]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(TicketInfoDTO))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult<Ticket> Insert([FromBody] TicketDataDTO ticket)
+        public ActionResult<TicketInfoDTO> Insert([FromBody] TicketDataDTO ticket)
         {
             var emailClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email);
-            Ticket ticketCreated = _service.Create(ticket.DTOToDomain());
+            Utilisateur? utilisateur = _userService.GetByEmail(emailClaim.Value);
+            Ticket ticketToAdd = ticket.DTOToDomain();
+            if(utilisateur is not null)
+            {
+                ticketToAdd.Auteur = utilisateur;
+                TicketInfoDTO ticketCreated = _service.Create(ticketToAdd).DomainToInfoDTO();
+
+                return CreatedAtAction(nameof(Get), new { id = ticketCreated.Id }, ticketCreated);
+            }
+
+            return BadRequest();
+
+
             //CreatedAtAction, va rajouter dans location (dans les headers) la requête à faire pour avoir accès la ressource qui vient d'être créée
             //Donc on doit lui renseigner: 
                 // en premier param, la méthode à appeler (ici notre Get avec Id)
@@ -82,7 +96,7 @@ namespace NET_CYBER_API.API.Controllers
 
             //from connected user with jwt get the email
 
-            return CreatedAtAction(nameof(Get), new { id = ticketCreated.Id }, ticketCreated);
+            
         }
 
 
