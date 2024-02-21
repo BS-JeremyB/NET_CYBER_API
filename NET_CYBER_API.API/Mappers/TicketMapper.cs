@@ -30,10 +30,10 @@ namespace NET_CYBER_API.API.Mappers
             };
         }
 
-        public static IEnumerable<TicketInfoDTO> ticketInfoDTOs(this IEnumerable<Ticket> tickets)
+        public static IEnumerable<TicketInfoDTO> DomainToInfoDTO(this IEnumerable<Ticket> tickets)
         {
             List<TicketInfoDTO> ticketInfoDTOs = new List<TicketInfoDTO>();
-            foreach (var ticket in tickets)
+            foreach (Ticket ticket in tickets)
             {
                 ticketInfoDTOs.Add(ticket.DomainToInfoDTO());
             }

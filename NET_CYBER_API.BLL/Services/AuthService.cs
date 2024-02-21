@@ -25,9 +25,9 @@ namespace NET_CYBER_API.BLL.Services
         {
             List<Claim> claims = new List<Claim>()
             {
-                new Claim("id", utilisateur.Id.ToString()),
-                new Claim("email", utilisateur.Email),
-                new Claim("Roles", utilisateur.Role.ToString()),
+                new Claim(ClaimTypes.NameIdentifier, utilisateur.Id.ToString()),
+                new Claim(ClaimTypes.Email, utilisateur.Email),
+                new Claim(ClaimTypes.Role, utilisateur.Role.ToString()),
             };
 
             SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));

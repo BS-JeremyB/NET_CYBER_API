@@ -20,27 +20,33 @@ namespace NET_CYBER_API.BLL.Services
             _repository = repository;
         }
 
+        public Ticket? Complete(int id)
+        {
+            Ticket? ticketToUpdate = _repository.GetById(id);
+            if(ticketToUpdate is null)
+            {
+                throw new NotFoundException($"Le ticket {id} n'a pas été trouvé");
+            }
+
+            ticketToUpdate.DateCloture = DateTime.Now;
+            ticketToUpdate.EstComplete = true;
+
+            return _repository.Complete(ticketToUpdate);
+        }
+
         public Ticket Create(Ticket ticket)
         {
-            return _repository.Create(ticket);
+             return _repository.Create(ticket);
         }
 
         public bool Delete(int id)
         {
-            try
+            bool isDeleted = _repository.Delete(id);
+            if(!isDeleted)
             {
-                bool success = _repository.Delete(id);
-                if(!success)
-                {
-                    throw new NotFoundException($"Le ticket {id} n'a pas été trouvé");
-                }
-                return success;
-
+                throw new NotFoundException($"Le ticket {id} n'a pas été trouvé");
             }
-            catch(InvalidOperationException ex)
-            {
-                throw new NotSingleException($"Ceci n'est pas sensé arriver mais padchance, y'a 2 fois le ticket {id} dans la DB");
-            }
+            return isDeleted;
         }
 
         public IEnumerable<Ticket> GetAll()
@@ -50,66 +56,31 @@ namespace NET_CYBER_API.BLL.Services
 
         public Ticket GetById(int id)
         {
-            Ticket? ticket;
-            try
+            Ticket? ticket = _repository.GetById(id);
+            if(ticket is null)
             {
-                ticket = _repository.GetById(id);
-                if (ticket is null)
-                {
-                    throw new NotFoundException($"Le ticket {id} n'a pas été trouvé");
-                }
-                return ticket;
+                throw new NotFoundException($"Le ticket {id} n'a pas été trouvé");
             }
-            catch(InvalidOperationException ex) {
-                throw new NotSingleException("Alors c'était vraiment très très peu probable mais y'a 2 fois l'id en DB");
-
-            }
-            
-                       
+            return ticket;
         }
 
         public Ticket? Update(int userId, Ticket ticket)
         {
+            Ticket? ticketToUpdate = _repository.GetById(ticket.Id);
+            if( ticketToUpdate is null)
+            {
+                throw new NotFoundException($"Le ticket {ticket.Id} n'a pas été trouvé");
+            }
 
+            if(ticketToUpdate.Auteur.Id != userId)
+            {
+                throw new NotAuthorizedException($"Vous n'êtes pas le propriétaire du ticket {ticket.Id}");
+            }
 
-            try
-            {
-                Ticket? ticketToUpdate = _repository.GetById(ticket.Id);
-                if(ticketToUpdate is null)
-                {
-                    throw new NotFoundException($"Le ticket {ticket.Id} n'a pas été trouvé");
-                }
-                if(ticketToUpdate.Auteur.Id != userId)
-                {
-                    throw new NotAuthorizedException($"Le ticket {ticket.Id} n'appartient pas à l'utilisateur {userId}");
-                }
-                ticketToUpdate.Titre = ticket.Titre;
-                ticketToUpdate.Description = ticket.Description;
-                return _repository.Update(ticketToUpdate);
-            }
-            catch(InvalidOperationException ex)
-            {
-                throw new NotSingleException($"Ceci n'est pas sensé arriver mais padchance, y'a 2 fois le ticket {ticket.Id} dans la DB");
-            }
-        }
+            ticketToUpdate.Titre = ticket.Titre;
+            ticketToUpdate.Description = ticket.Description;
 
-        public Ticket? Complete(int id)
-        {
-            try
-            {
-                Ticket? ticketToUpdate = _repository.GetById(id);
-                if (ticketToUpdate is null)
-                {
-                    throw new NotFoundException($"Le ticket {id} n'a pas été trouvé");
-                }
-                ticketToUpdate.DateCloture = DateTime.Now;
-                ticketToUpdate.EstComplete = true;
-                return _repository.Complete(ticketToUpdate);
-            }
-            catch (InvalidOperationException ex)
-            {
-                throw new NotSingleException($"Ceci n'est pas sensé arriver mais padchance, y'a 2 fois le ticket {id} dans la DB");
-            }
+            return _repository.Update(ticketToUpdate);
         }
     }
 }

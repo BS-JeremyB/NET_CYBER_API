@@ -1,11 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using NET_CYBER_API.Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Crypt = BCrypt.Net;
 
 namespace NET_CYBER_API.DAL.Data.config
 {
@@ -20,10 +16,8 @@ namespace NET_CYBER_API.DAL.Data.config
                 Email = "doejohn@mail.be",
                 Nom = "doe",
                 Prenom = "john",
-                Password = "Test1234=",
+                Password = Crypt.BCrypt.HashPassword("Test1234="),
                 Role = Domain.Enums.RoleEnum.Admin
-
-
             });
         }
     }

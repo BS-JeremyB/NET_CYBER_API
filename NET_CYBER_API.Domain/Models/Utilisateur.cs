@@ -22,7 +22,6 @@ namespace NET_CYBER_API.Domain.Models
         public string Password { get; set; }
         public RoleEnum Role { get; set; }
         [NotMapped]
-        [JsonIgnore]
         public ICollection<Ticket> tickets { get; set; }
 
     }

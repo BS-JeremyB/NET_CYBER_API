@@ -35,24 +35,24 @@ namespace NET_CYBER_API.DAL.Repositories
 
         public bool Delete(int id)
         {
-            Ticket? ticket = _context.tickets.FirstOrDefault(x => x.Id == id);
-            if (ticket is null)
+            Ticket ticketToDelete = GetById(id);
+            if(ticketToDelete is not null)
             {
-                return false;
+                _context.tickets.Remove(ticketToDelete);
+                _context.SaveChanges();
+                return true;
             }
-            _context.tickets.Remove(ticket);
-            _context.SaveChanges();
-            return true;
+            return false;
         }
 
         public IEnumerable<Ticket> GetAll()
         {
-            return _context.tickets.Include(u => u.Auteur);
+            return _context.tickets.Include(t => t.Auteur);
         }
 
         public Ticket? GetById(int id)
         {
-            return _context.tickets.Include(u => u.Auteur).FirstOrDefault(t => t.Id == id);
+            return _context.tickets.Include(t => t.Auteur).FirstOrDefault(t => t.Id == id);
         }
 
         public Ticket? Update(Ticket ticket)
