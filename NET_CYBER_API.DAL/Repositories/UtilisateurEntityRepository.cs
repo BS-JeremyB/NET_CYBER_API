@@ -49,11 +49,18 @@ namespace NET_CYBER_API.DAL.Repositories
             return _context.utilisateurs.FirstOrDefault(x => x.Id == id);
         }
 
-        public Utilisateur Update(Utilisateur Utilisateur)
+        public Utilisateur Update(Utilisateur utilisateur)
         {
-            _context.utilisateurs.Update(Utilisateur);
+            _context.utilisateurs.Update(utilisateur);
             _context.SaveChanges();
-            return Utilisateur;
+            return utilisateur;
+        }
+
+        public Utilisateur UpdateRole(Utilisateur utilisateur)
+        {
+            _context.utilisateurs.Update(utilisateur);
+            _context.SaveChanges();
+            return utilisateur;
         }
     }
 }

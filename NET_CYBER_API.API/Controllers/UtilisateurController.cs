@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NET_CYBER_API.API.DTOs;
 using NET_CYBER_API.API.Mappers;
@@ -139,6 +140,33 @@ namespace NET_CYBER_API.API.Controllers
             }
 
             return BadRequest(StatusCodes.Status400BadRequest);
+        }
+
+        [HttpPut("role/{id}")]
+        [Authorize(Roles = "Admin")]
+        [Produces("application/json")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Utilisateur))]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ErrorResponse))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(ErrorResponse))]
+        public ActionResult<Utilisateur> UpdateRole([FromRoute] int id, [FromBody] UtilisateurRoleDataDTO utilisateur)
+        {
+            try
+            {
+                Utilisateur utilisateurToUpdate = utilisateur.DTOToDomain();
+
+                utilisateurToUpdate.Id = id;
+                Utilisateur? utilisateurUpdated = _service.UpdateRole(utilisateurToUpdate);
+                return Ok(utilisateurUpdated);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(new ErrorResponse(code: StatusCodes.Status404NotFound, message: ex.Message));
+
+            }
+            catch (NotAuthorizedException ex)
+            {
+                return Unauthorized(new ErrorResponse(code: StatusCodes.Status401Unauthorized, message: ex.Message));
+            }
         }
     }
 }

@@ -12,8 +12,9 @@ namespace NET_CYBER_API.BLL.Interfaces
         IEnumerable<Utilisateur> GetAll();
         Utilisateur? GetById(int id);
         Utilisateur? GetByEmail(string email);
-        Utilisateur Create(Utilisateur Utilisateur);
-        Utilisateur? Update(Utilisateur Utilisateur);
+        Utilisateur Create(Utilisateur utilisateur);
+        Utilisateur? Update(Utilisateur utilisateur);
+        Utilisateur? UpdateRole(Utilisateur utilisateur);
         bool Delete(int id);
         string? Login(string email, string password);
     }

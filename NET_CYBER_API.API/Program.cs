@@ -95,6 +95,17 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         });
 
 
+builder.Services.AddCors(opt => 
+{ 
+    opt.AddDefaultPolicy(builder =>
+    { 
+        builder.WithOrigins(new string[] { "https://localhost" })
+        .WithHeaders(new string[] { "Content-Type" })
+        .AllowAnyMethod();
+    });
+});
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

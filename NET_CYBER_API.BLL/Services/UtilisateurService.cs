@@ -6,6 +6,7 @@ using NET_CYBER_API.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
+using NET_CYBER_API.Domain.Enums;
 
 namespace NET_CYBER_API.BLL.Services
 {
@@ -92,6 +93,21 @@ namespace NET_CYBER_API.BLL.Services
             throw new InvalidOperationException("Mot de passe incorrect");
 
 
+        }
+
+        public Utilisateur? UpdateRole(Utilisateur utilisateur)
+        {
+            Utilisateur? utilisateurToUpdate = _repository.GetById(utilisateur.Id);
+            if(utilisateurToUpdate is null)
+            {
+                throw new NotFoundException($"L'id '{utilisateur.Id}' n'a pas été trouvé");
+            }
+            if(utilisateurToUpdate.Role == RoleEnum.Admin || utilisateur.Role == RoleEnum.Admin)
+            {
+                throw new NotAuthorizedException("Vous n'avez pas le droit de changer le role d'un Admin ou en Admin");
+            }
+            utilisateurToUpdate.Role = utilisateur.Role;
+            return _repository.UpdateRole(utilisateurToUpdate);
         }
     }
 }
